@@ -1,20 +1,27 @@
 package ealerte.project.demo.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.core.style.ToStringCreator;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
+@Table(name="address")
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotEmpty
     private String StreetName;
-    private  String StreetNumber;
+    @NotEmpty
+    private String StreetNumber;
+    @NotEmpty
     private String postalcode;
+    @NotEmpty
     private String region;
+    @OneToOne
+    @MapsId
+    private InterventionUnit interventionUnit;
 
     public Long getId() {
         return id;
@@ -36,6 +43,10 @@ public class Address {
         return region;
     }
 
+    public InterventionUnit getInterventionUnit() {
+        return interventionUnit;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -55,4 +66,18 @@ public class Address {
     public void setRegion(String region) {
         this.region = region;
     }
+
+    public void setInterventionUnit(InterventionUnit interventionUnit) {
+        this.interventionUnit = interventionUnit;
+    }
+
+    @Override
+    public String toString(){
+        return new ToStringCreator(this)
+                .append("streetName", this.getStreetName())
+                .append("streetNumber", this.getStreetNumber())
+                .append("region", this.getRegion())
+                .append("postalCode", this.getPostalcode()).toString();
+    }
+
 }

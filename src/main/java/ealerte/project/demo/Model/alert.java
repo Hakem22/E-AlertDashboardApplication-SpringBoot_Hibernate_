@@ -1,50 +1,91 @@
 package ealerte.project.demo.Model;
 
+import org.springframework.core.style.ToStringCreator;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.Timer;
+
+
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Alert {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private LocalDate Date;
-    private LocalTime Time;
-    @Enumerated(EnumType.STRING)
-    private alertState AlertSate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotEmpty
+    private LocalDate dateSend;
+    @NotEmpty
+    private LocalTime timeSend;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateRecieved;
+    private LocalTime timeRecieved;
+    private AlertState alertState;
+
+    @ManyToOne
+    @JoinColumn(name="acteur_id", nullable = false)
+    private Acteur acteur;
+
+    public LocalDate getDateSend() {
+        return dateSend;
+    }
+
+    public LocalTime getTimeSend() {
+        return timeSend;
+    }
+
+    public LocalDate getDateRecieved() {
+        return dateRecieved;
+    }
+
+    public LocalTime getTimeRecieved() {
+        return timeRecieved;
+    }
+
+    public AlertState getAlertState() {
+        return alertState;
+    }
+
+    public void setDateSend(LocalDate dateSend) {
+        this.dateSend = dateSend;
+    }
+
+    public void setTimeSend(LocalTime timeSend) {
+        this.timeSend = timeSend;
+    }
+
+    public void setDateRecieved(LocalDate dateRecieved) {
+        this.dateRecieved = dateRecieved;
+    }
+
+    public void setTimeRecieved(LocalTime timeRecieved) {
+        this.timeRecieved = timeRecieved;
+    }
+
+    public void setAlertState(AlertState alertState) {
+        this.alertState = alertState;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public LocalDate getDate() {
-        return Date;
-    }
-
-    public LocalTime getTime() {
-        return Time;
-    }
-
-    public alertState getAlertSate() {
-        return AlertSate;
+    public Acteur getActeur() {
+        return acteur;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setDate(LocalDate date) {
-        Date = date;
-    }
-
-    public void setTime(LocalTime time) {
-        Time = time;
-    }
-
-    public void setAlertSate(alertState alertSate) {
-        AlertSate = alertSate;
+    public void setActeur(Acteur acteur) {
+        this.acteur = acteur;
     }
 }
+
+

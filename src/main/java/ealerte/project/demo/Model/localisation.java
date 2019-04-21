@@ -1,23 +1,25 @@
 package ealerte.project.demo.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.core.style.ToStringCreator;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Localisation {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
+    @NotEmpty
     private Float altitude;
+    @NotEmpty
     private Float longitude;
+    @NotEmpty
     private Float rayon;
 
-    public Long getId() {
-        return id;
-    }
+
 
     public Float getAltitude() {
         return altitude;
@@ -31,9 +33,6 @@ public class Localisation {
         return rayon;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void setAltitude(Float altitude) {
         this.altitude = altitude;
@@ -45,5 +44,12 @@ public class Localisation {
 
     public void setRayon(Float rayon) {
         this.rayon = rayon;
+    }
+
+    public String toString(){
+        return new ToStringCreator(this)
+                .append("altitude", this.getAltitude())
+                .append("longitude", this.getLongitude())
+                .toString();
     }
 }
