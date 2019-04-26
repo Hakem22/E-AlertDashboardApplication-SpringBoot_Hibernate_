@@ -140,6 +140,5 @@ public class HomeConroller implements ErrorController {
     @Override
     public String getErrorPath() {
         return "/error";
-
     }
     }
