@@ -4,34 +4,39 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="alertS")
+@Table(name="Alert_Sensor")
 public class AlertS extends  Alert implements  Comparable<AlertS>{
 
 
-    @NotEmpty
-    private Float Value;
-/*
+    @NotNull
+    private Double Value;
+
+
     @ManyToOne
-    @JoinColumn(name="acteur_id", nullable = false)
-    private Acteur acteur;
-*/
-    @ManyToOne
-    @JoinColumn(name = "sensor-id", nullable = false)
+    @JoinColumn(nullable = false)
     private Sensor sensor;
 
-    @OneToOne(mappedBy = "alert", cascade =CascadeType.ALL, fetch = FetchType.LAZY)
-    private LocalisationA localisationA;
 
     @OneToMany(mappedBy = "alert")
     private List<Intervention> interventions=new ArrayList<>();
 
+    public AlertS(){super();}
 
 
-    public Float getValue() {
+    public AlertS( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend, @NotNull Double value, LocalisationA localisationA) {
+        super( dateSend, timeSend, localisationA);
+        Value = value;
+
+    }
+
+    public Double getValue() {
         return Value;
     }
 
@@ -41,9 +46,6 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
         return sensor;
     }
 
-    public LocalisationA getLocalisationA() {
-        return localisationA;
-    }
 
     public List<Intervention> getInterventions() {
         return interventions;
@@ -51,7 +53,7 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
 
 
 
-    public void setValue(Float value) {
+    public void setValue(Double value) {
         Value = value;
     }
 
@@ -61,9 +63,6 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
         this.sensor = sensor;
     }
 
-    public void setLocalisationA(LocalisationA localisationA) {
-        this.localisationA = localisationA;
-    }
 
     @Override
     public String toString(){

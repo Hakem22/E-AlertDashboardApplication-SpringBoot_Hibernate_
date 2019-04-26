@@ -1,22 +1,21 @@
 package ealerte.project.demo.Model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="admin")
 public class Admin extends Acteur{
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "acteur", fetch = FetchType.LAZY)
-    private List<Alert> alerts= new ArrayList<>();
+    public Admin(){}
+    public Admin(@NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password, Alert... alerts){
+        super(firstName,lastName, phone,username, password, alerts);
 
-    public List<Alert> getAlerts() {
-        return alerts;
     }
 
-    public void setAlerts(List<Alert> alerts) {
-        this.alerts = alerts;
-    }
 }

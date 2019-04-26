@@ -4,36 +4,51 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
-@Table(name="alertC")
+@Table(name="Alert_Citizen")
 public class AlertC extends Alert implements Comparable<AlertC>{
 
 
     @Enumerated(EnumType.STRING)
-    @NotEmpty
     private AlertType alertType;
     @NotEmpty
     private String description;
 
-    @OneToMany(mappedBy = "alertC", cascade =CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Media> medias= new ArrayList<>();
-/*
+    @OneToMany(mappedBy = "alertC", cascade =CascadeType.ALL)
+    private Set<Media> medias;
+
+
     @ManyToOne
-    @JoinColumn(name="acteur_id", nullable = false)
-    private Acteur acteur;
-*/
-    @ManyToOne
-    @JoinColumn(name = "citizen-id", nullable = false)
+    @JoinColumn
     private Citizen citizen;
 
-    @OneToOne(mappedBy = "alert", cascade =CascadeType.ALL, fetch = FetchType.LAZY)
-    private LocalisationA localisationA;
+
 
     @OneToMany(mappedBy = "alert")
     private List<Intervention> interventions=new ArrayList<>();
+
+
+    public AlertC(){super();}
+
+    public AlertC(@NotNull LocalDate dateSend, @NotNull LocalTime timeSend,  AlertType alertType, @NotEmpty String description, LocalisationA localisationA, Media... media) {
+        super(dateSend, timeSend,localisationA);
+        this.alertType = alertType;
+        this.description = description;
+        this.medias =  Stream.of(media).collect(Collectors.toSet());
+        this.medias.forEach(x -> x.setAlertC(this));
+
+
+
+    }
 
 
 
@@ -45,7 +60,7 @@ public class AlertC extends Alert implements Comparable<AlertC>{
         return description;
     }
 
-    public List<Media> getMedias() {
+    public Set<Media> getMedias() {
         return medias;
     }
 
@@ -55,9 +70,6 @@ public class AlertC extends Alert implements Comparable<AlertC>{
         return citizen;
     }
 
-    public LocalisationA getLocalisationA() {
-        return localisationA;
-    }
 
     public List<Intervention> getInterventions() {
         return interventions;
@@ -73,7 +85,7 @@ public class AlertC extends Alert implements Comparable<AlertC>{
         this.description = description;
     }
 
-    public void setMedias(List<Media> medias) {
+    public void setMedias(Set<Media> medias) {
         this.medias = medias;
     }
 
@@ -82,9 +94,6 @@ public class AlertC extends Alert implements Comparable<AlertC>{
         this.citizen = citizen;
     }
 
-    public void setLocalisationA(LocalisationA localisationA) {
-        this.localisationA = localisationA;
-    }
 
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;

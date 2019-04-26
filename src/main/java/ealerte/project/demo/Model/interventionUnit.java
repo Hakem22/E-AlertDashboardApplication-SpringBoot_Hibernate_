@@ -4,28 +4,41 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name="interventionUnit")
-public class InterventionUnit {
+public class InterventionUnit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    @NotEmpty
+
     private InterventionType interventionType;
-    @OneToOne(mappedBy = "interventionUnit", cascade = CascadeType.ALL)
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
     private Address address;
 
-    @OneToOne(mappedBy = "interventionUnit", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
     private LocalisationU localisationU;
 
     @OneToMany(mappedBy = "interventionUnit", cascade = CascadeType.ALL)
     private List<Intervention> interventions= new ArrayList<>();
+
+    public InterventionUnit(){}
+
+    public InterventionUnit(InterventionType interventionType, Address address, LocalisationU localisationU) {
+        this.interventionType = interventionType;
+        this.address = address;
+        this.address.setInterventionUnit(this);
+        this.localisationU = localisationU;
+        this.localisationU.setInterventionUnit(this);
+    }
 
     public Long getId() {
         return id;

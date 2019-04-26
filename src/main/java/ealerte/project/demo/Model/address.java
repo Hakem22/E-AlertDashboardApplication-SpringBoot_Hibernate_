@@ -4,12 +4,14 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 @Entity
 @Table(name="address")
-public class Address {
+public class Address implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty
     private String StreetName;
@@ -19,9 +21,16 @@ public class Address {
     private String postalcode;
     @NotEmpty
     private String region;
-    @OneToOne
-    @MapsId
+    @OneToOne(mappedBy = "address")
     private InterventionUnit interventionUnit;
+
+    public Address(){}
+    public Address( @NotEmpty String streetName, @NotEmpty String streetNumber, @NotEmpty String postalcode, @NotEmpty String region) {
+        StreetName = streetName;
+        StreetNumber = streetNumber;
+        this.postalcode = postalcode;
+        this.region = region;
+    }
 
     public Long getId() {
         return id;

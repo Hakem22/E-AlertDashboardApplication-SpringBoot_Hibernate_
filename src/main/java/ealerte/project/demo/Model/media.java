@@ -13,9 +13,14 @@ public class Media {
     private String URI;
 
     @ManyToOne
-    @JoinColumn(name="alert_id", nullable = false)
+    @JoinColumn(nullable = false)
     private AlertC alertC;
 
+    public Media (){}
+
+    public Media(@NotNull String URI) {
+        this.URI = URI;
+    }
 
     public Long getId() {
         return id;

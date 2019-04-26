@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -15,21 +16,45 @@ import java.time.LocalTime;
 public class Alert {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotEmpty
+    @NotNull
     private LocalDate dateSend;
-    @NotEmpty
+    @NotNull
     private LocalTime timeSend;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateRecieved;
     private LocalTime timeRecieved;
     private AlertState alertState;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private LocalisationA localisationA;
+
     @ManyToOne
-    @JoinColumn(name="acteur_id", nullable = false)
+    @JoinColumn
     private Acteur acteur;
+
+    public Alert(){}
+
+
+    public Alert( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend , LocalisationA localisationA) {
+
+        this.dateSend = dateSend;
+        this.timeSend = timeSend;
+        this.localisationA=localisationA;
+        this.localisationA.setAlert(this);
+    }
+
+    public LocalisationA getLocalisationA() {
+        return localisationA;
+    }
+
+    public void setLocalisationA(LocalisationA localisationA) {
+        this.localisationA = localisationA;
+    }
 
     public LocalDate getDateSend() {
         return dateSend;

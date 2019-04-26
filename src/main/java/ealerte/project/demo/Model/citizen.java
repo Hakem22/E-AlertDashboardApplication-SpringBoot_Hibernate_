@@ -7,6 +7,9 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="Citizen")
@@ -24,9 +27,17 @@ public class Citizen {
 
     private String fastName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "citizen")
-    private List<AlertC> alerts= new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL,  mappedBy = "citizen")
+    private Set<AlertC> alertsC;
 
+    public Citizen(){}
+
+    public Citizen(@NotEmpty @Digits(fraction = 0, integer = 10) String phoneNumber, AlertC... alertsC) {
+
+        this.phoneNumber = phoneNumber;
+        this.alertsC =  Stream.of(alertsC).collect(Collectors.toSet());
+        this.alertsC.forEach(x -> x.setCitizen(this));
+    }
 
     public Long getId() {
         return id;
@@ -44,8 +55,8 @@ public class Citizen {
         return fastName;
     }
 
-    public List<AlertC> getAlerts() {
-        return alerts;
+    public Set<AlertC> getAlerts() {
+        return alertsC;
     }
 
     public void setId(Long id) {
@@ -65,12 +76,12 @@ public class Citizen {
         this.fastName = fastName;
     }
 
-    public void setAlerts(List<AlertC> alerts) {
-        this.alerts = alerts;
+    public void setAlerts(Set<AlertC> alertsC) {
+        this.alertsC = alertsC;
     }
 
     public void addAlertC(AlertC alertC){
-        this.alerts.add(alertC);
+        this.alertsC.add(alertC);
     }
     @Override
     public String toString(){

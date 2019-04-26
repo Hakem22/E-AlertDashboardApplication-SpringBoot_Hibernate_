@@ -9,6 +9,12 @@ public class InterventionKey implements Serializable {
     private Long alertId;
     private Long interventionUnitId;
 
+    public InterventionKey(){}
+    public InterventionKey(Long alertId, Long interventionUnitId) {
+        this.alertId = alertId;
+        this.interventionUnitId = interventionUnitId;
+    }
+
     public Long getAlertId() {
         return alertId;
     }

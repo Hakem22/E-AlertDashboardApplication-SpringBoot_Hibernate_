@@ -4,45 +4,65 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Localisation {
+public class Localisation implements Serializable {
 
 
     @Id
-    private long id;
-    @NotEmpty
-    private Float altitude;
-    @NotEmpty
-    private Float longitude;
-    @NotEmpty
-    private Float rayon;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
+    private Double altitude;
+    @NotNull
+    private Double longitude;
+    @NotNull
+    private Double rayon;
 
 
+    public Localisation(){}
+    public Localisation( @NotNull Double altitude, @NotNull Double longitude, @NotNull Double rayon) {
+        this.altitude = altitude;
+        this.longitude = longitude;
+        this.rayon = rayon;
+    }
 
-    public Float getAltitude() {
+    public Double getAltitude() {
         return altitude;
     }
 
-    public Float getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public Float getRayon() {
+    public Double getRayon() {
         return rayon;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setAltitude(Float altitude) {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setAltitude(Double altitude) {
         this.altitude = altitude;
     }
 
-    public void setLongitude(Float longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public void setRayon(Float rayon) {
+    public void setRayon(Double rayon) {
         this.rayon = rayon;
     }
 

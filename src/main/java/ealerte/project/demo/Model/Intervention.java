@@ -2,6 +2,7 @@ package ealerte.project.demo.Model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -11,10 +12,10 @@ public class Intervention {
 
     @EmbeddedId
     private InterventionKey id;
-    @NotEmpty
+    @NotNull
     private LocalDate dateStart;
     private LocalDate dateEnd;
-    @NotEmpty
+    @NotNull
     private LocalTime timeStart;
     private LocalTime timeEnd;
     private Long victims;
@@ -30,6 +31,15 @@ public class Intervention {
     @MapsId("interventionUnitId")
     @JoinColumn(name="interventionUnitId")
     private InterventionUnit interventionUnit;
+
+    public Intervention(){}
+    public Intervention(InterventionKey id, @NotNull LocalDate dateStart,  @NotNull LocalTime timeStart, Alert alert, InterventionUnit interventionUnit) {
+        this.id = id;
+        this.dateStart = dateStart;
+        this.timeStart = timeStart;
+        this.alert = alert;
+        this.interventionUnit = interventionUnit;
+    }
 
     public InterventionKey getId() {
         return id;

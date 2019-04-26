@@ -1,5 +1,5 @@
 package ealerte.project.demo.Model;
 
-public enum alertState {
-    VALIDATED, WAITING, DECLINED
+public enum AlertState {
+    VALIDE, INVALIDE, REDONDANT
 }
