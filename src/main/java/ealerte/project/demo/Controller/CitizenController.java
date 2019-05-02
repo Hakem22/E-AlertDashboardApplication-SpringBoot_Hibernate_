@@ -1,42 +1,91 @@
 package ealerte.project.demo.Controller;
 
+import ealerte.project.demo.Model.AlertC;
+import ealerte.project.demo.Model.Citizen;
+import ealerte.project.demo.Repository.AlertCRepository;
 import ealerte.project.demo.Repository.CitizenRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
-@Controller
+
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class CitizenController {
 
     private CitizenRepository citizenRepository;
+    private AlertCRepository alertCRepository;
 
-    public CitizenController(CitizenRepository citizenRepository) {
+    public CitizenController(CitizenRepository citizenRepository, AlertCRepository alertCRepository) {
         this.citizenRepository = citizenRepository;
+        this.alertCRepository = alertCRepository;
     }
 
-    @RequestMapping("/citizens")
-    public String getCitizens(Model model) {
-
-        model.addAttribute("citizens", citizenRepository.findAll());
-
-        return "citizens";
+    @GetMapping("/citizens")
+    public List<Citizen> getCitizens() {
+        return (List<Citizen>) citizenRepository.findAll();
     }
 
-    /**
-     * Custom handler for displaying a citizen.
-     *
-     * @param citizenId the ID of the citizen to display
-     * @return a ModelMap with the model attributes for the view
-     */
-    @GetMapping("/citizens/{citizenId}")
-    public ModelAndView showCitizen(@PathVariable("citizenId") long citizenId){
-        ModelAndView mav=new ModelAndView();
-        mav.addObject(this.citizenRepository.findById(citizenId));
-        return mav;
+    @PostMapping("/citizen")
+    public void addCitizen(@RequestBody Citizen citizen){
+        citizenRepository.save(citizen);
+    }
+
+    @GetMapping("/citizen/{id}")
+    public Citizen retrieveCitizen(@PathVariable long id) {
+        Optional<Citizen> citizen = citizenRepository.findById(id);
+       /* if (!admin.isPresent())
+            throw new AdminNotFoundException("id-" + id);*/
+        return citizen.get();
+    }
+    @DeleteMapping("/citizen/{id}")
+    public void deleteCitizen(@PathVariable long id) {
+        citizenRepository.deleteById(id);
+    }
+
+    @PutMapping("/citizen/{id}")
+    public ResponseEntity<Object> updateAdmin(@RequestBody Citizen citizen, @PathVariable long id) {
+
+        Optional<Citizen> citizenOptional = citizenRepository.findById(id);
+
+        if (!citizenOptional.isPresent())  return ResponseEntity.notFound().build();
+
+        citizen.setId(id);
+        citizenRepository.save(citizen);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/citizen/{id}/alerts")
+    public Page<AlertC> getAllAlertsByCitizenId(@PathVariable (value = "id") Long id, Pageable pageable) {
+        return alertCRepository.findByCitizenId(id,pageable);
+    }
+
+    @PostMapping("/citizen/{id}/alerts")
+    public AlertC createAlerts(@PathVariable (value = "id") Long id, @Valid @RequestBody AlertC alertC) {
+        return citizenRepository.findById(id).map(citizen -> {
+            alertC.setCitizen(citizen);
+            return alertCRepository.save(alertC);
+        }).orElseThrow(() -> new ResourceNotFoundException("citizenId " + id + " not found"));
+    }
+
+
+
+    @DeleteMapping("/citizen/{id}/alerts/{alertId}")
+    public ResponseEntity<?> deleteAlert(@PathVariable (value = "id") Long id,
+                                         @PathVariable (value = "alertId") Long alertId) {
+        return alertCRepository.findByIdAndCitizenId(alertId,id).map(alertC -> {
+            alertCRepository.delete(alertC);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException("alert not found with id " + alertId + " and postId " + id));
     }
 
 }
