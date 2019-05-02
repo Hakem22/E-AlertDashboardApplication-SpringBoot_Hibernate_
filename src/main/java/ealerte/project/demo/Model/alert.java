@@ -45,7 +45,7 @@ public class Alert {
         this.dateSend = dateSend;
         this.timeSend = timeSend;
         this.localisationA=localisationA;
-        this.localisationA.setAlert(this);
+        //this.localisationA.setAlert(this);
     }
 
     public LocalisationA getLocalisationA() {
