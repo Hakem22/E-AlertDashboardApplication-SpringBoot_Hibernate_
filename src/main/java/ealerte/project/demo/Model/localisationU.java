@@ -1,5 +1,7 @@
 package ealerte.project.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -8,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Table(name="localisationU")
 public class LocalisationU extends Localisation {
 
-
+/*
     @OneToOne(mappedBy = "localisationU")
     private InterventionUnit interventionUnit;
-
+*/
     public LocalisationU() { super ();}
 
 
@@ -19,7 +21,7 @@ public class LocalisationU extends Localisation {
     public LocalisationU(@NotNull Double altitude, @NotNull Double longitude, @NotNull Double rayon) {
         super(altitude, longitude, rayon);
     }
-
+/*
     public InterventionUnit getInterventionUnit() {
         return interventionUnit;
     }
@@ -27,7 +29,7 @@ public class LocalisationU extends Localisation {
     public void setInterventionUnit(InterventionUnit interventionUnit) {
         this.interventionUnit = interventionUnit;
     }
-
+*/
 
 
 }

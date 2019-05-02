@@ -28,20 +28,20 @@ public class Acteur {
     private String username;
     @NotEmpty
     private String password;
-
+/*
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "acteur")
     private Set<Alert> alerts;
-
+*/
     public Acteur(){}
 
-    public Acteur( @NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password, Alert... alerts) {
+    public Acteur( @NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.username = username;
         this.password = password;
-        this.alerts = Stream.of(alerts).collect(Collectors.toSet());
-        this.alerts.forEach(x -> x.setActeur(this));
+       // this.alerts = Stream.of(alerts).collect(Collectors.toSet());
+        //this.alerts.forEach(x -> x.setActeur(this));
     }
 
     public Long getId() {

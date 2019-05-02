@@ -28,18 +28,19 @@ public class Sensor {
     private Double altitude;
     @NotNull
     private Double longitude;
+    /*
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sensor")
     private Set<AlertS> alertsS;
-
+*/
     public Sensor(){}
-    public Sensor(@NotEmpty String reference, SensorState state, SensorType type, @NotNull Double altitude, @NotNull Double longitude,AlertS... alertsS) {
+    public Sensor(@NotEmpty String reference, SensorState state, SensorType type, @NotNull Double altitude, @NotNull Double longitude) {
         this.reference = reference;
         State = state;
         this.type = type;
         this.altitude = altitude;
         this.longitude = longitude;
-        this.alertsS =  Stream.of(alertsS).collect(Collectors.toSet());
-        this.alertsS.forEach(x -> x.setSensor(this));
+       // this.alertsS =  Stream.of(alertsS).collect(Collectors.toSet());
+        //this.alertsS.forEach(x -> x.setSensor(this));
     }
 
     public Long getId() {
@@ -65,11 +66,11 @@ public class Sensor {
     public Double getLongitude() {
         return longitude;
     }
-
+/*
     public Set<AlertS> getAlertsS() {
         return alertsS;
     }
-
+*/
     public void setId(Long id) {
         this.id = id;
     }
@@ -93,12 +94,12 @@ public class Sensor {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
+/*
     public void setAlertsS(Set<AlertS> alertsS) {
         this.alertsS = alertsS;
     }
-
-    public void addAlertS(AlertS alertS){ this.alertsS.add(alertS); alertS.setSensor(this);}
+*/
+  //  public void addAlertS(AlertS alertS){ this.alertsS.add(alertS); alertS.setSensor(this);}
 
     @Override
     public String toString(){

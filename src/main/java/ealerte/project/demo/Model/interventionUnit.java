@@ -17,27 +17,28 @@ public class InterventionUnit implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-
     private InterventionType interventionType;
-    @OneToOne( cascade = CascadeType.ALL)
-    @JoinColumn(unique = true)
-    private Address address;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private LocalisationU localisationU;
 
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Address address;
+/*
     @OneToMany(mappedBy = "interventionUnit", cascade = CascadeType.ALL)
     private List<Intervention> interventions= new ArrayList<>();
-
+*/
     public InterventionUnit(){}
 
-    public InterventionUnit(InterventionType interventionType, Address address, LocalisationU localisationU) {
+    public InterventionUnit(InterventionType interventionType, LocalisationU localisationU, Address address) {
         this.interventionType = interventionType;
         this.address = address;
-        this.address.setInterventionUnit(this);
+        //this.address.setInterventionUnit(this);
         this.localisationU = localisationU;
-        this.localisationU.setInterventionUnit(this);
+        //this.localisationU.setInterventionUnit(this);
     }
 
     public Long getId() {
@@ -63,11 +64,11 @@ public class InterventionUnit implements Serializable {
     public void setInterventionType(InterventionType interventionType) {
         this.interventionType = interventionType;
     }
-
+/*
     public List<Intervention> getInterventions() {
         return interventions;
     }
-
+*/
     public void setAddress(Address address) {
         this.address = address;
     }
@@ -75,11 +76,11 @@ public class InterventionUnit implements Serializable {
     public void setLocalisationU(LocalisationU localisationU) {
         this.localisationU = localisationU;
     }
-
+/*
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
     }
-
+*/
     @Override
     public String toString(){
         return new ToStringCreator(this)

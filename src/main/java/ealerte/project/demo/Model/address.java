@@ -1,5 +1,6 @@
 package ealerte.project.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
@@ -21,8 +22,9 @@ public class Address implements Serializable {
     private String postalcode;
     @NotEmpty
     private String region;
+    /*
     @OneToOne(mappedBy = "address")
-    private InterventionUnit interventionUnit;
+    private InterventionUnit interventionUnit;*/
 
     public Address(){}
     public Address( @NotEmpty String streetName, @NotEmpty String streetNumber, @NotEmpty String postalcode, @NotEmpty String region) {
@@ -51,11 +53,11 @@ public class Address implements Serializable {
     public String getRegion() {
         return region;
     }
-
+/*
     public InterventionUnit getInterventionUnit() {
         return interventionUnit;
     }
-
+*/
     public void setId(Long id) {
         this.id = id;
     }
@@ -75,11 +77,11 @@ public class Address implements Serializable {
     public void setRegion(String region) {
         this.region = region;
     }
-
+/*
     public void setInterventionUnit(InterventionUnit interventionUnit) {
         this.interventionUnit = interventionUnit;
     }
-
+*/
     @Override
     public String toString(){
         return new ToStringCreator(this)

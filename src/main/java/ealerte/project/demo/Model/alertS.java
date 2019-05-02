@@ -23,10 +23,10 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
     @JoinColumn(nullable = false)
     private Sensor sensor;
 
-
+/*
     @OneToMany(mappedBy = "alert")
     private List<Intervention> interventions=new ArrayList<>();
-
+*/
     public AlertS(){super();}
 
 
@@ -46,12 +46,12 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
         return sensor;
     }
 
-
+/*
     public List<Intervention> getInterventions() {
         return interventions;
     }
 
-
+*/
 
     public void setValue(Double value) {
         Value = value;
@@ -71,11 +71,11 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
                 .append("sensor", this.getSensor().toString())
                 .toString();
     }
-
+/*
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
     }
-
+*/
     public int compareTo(AlertS alerts){
         if( this.getSensor().getType().equals(alerts.getSensor().getType())
                 &&

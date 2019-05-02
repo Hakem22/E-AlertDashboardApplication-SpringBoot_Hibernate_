@@ -26,17 +26,17 @@ public class Citizen {
     private String firstName;
 
     private String fastName;
-
+/*
     @OneToMany(cascade = CascadeType.ALL,  mappedBy = "citizen")
     private Set<AlertC> alertsC;
-
+*/
     public Citizen(){}
 
-    public Citizen(@NotEmpty @Digits(fraction = 0, integer = 10) String phoneNumber, AlertC... alertsC) {
+    public Citizen(@NotEmpty @Digits(fraction = 0, integer = 10) String phoneNumber) {
 
         this.phoneNumber = phoneNumber;
-        this.alertsC =  Stream.of(alertsC).collect(Collectors.toSet());
-        this.alertsC.forEach(x -> x.setCitizen(this));
+      //  this.alertsC =  Stream.of(alertsC).collect(Collectors.toSet());
+        //this.alertsC.forEach(x -> x.setCitizen(this));
     }
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class Citizen {
     public String getFastName() {
         return fastName;
     }
-
+/*
     public Set<AlertC> getAlerts() {
         return alertsC;
     }
-
+*/
     public void setId(Long id) {
         this.id = id;
     }
@@ -75,7 +75,7 @@ public class Citizen {
     public void setFastName(String fastName) {
         this.fastName = fastName;
     }
-
+/*
     public void setAlerts(Set<AlertC> alertsC) {
         this.alertsC = alertsC;
     }
@@ -83,6 +83,7 @@ public class Citizen {
     public void addAlertC(AlertC alertC){
         this.alertsC.add(alertC);
     }
+    */
     @Override
     public String toString(){
         return new ToStringCreator(this)

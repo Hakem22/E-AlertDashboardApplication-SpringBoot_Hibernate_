@@ -22,20 +22,20 @@ public class AlertC extends Alert implements Comparable<AlertC>{
     private AlertType alertType;
     @NotEmpty
     private String description;
-
+/*
     @OneToMany(mappedBy = "alertC", cascade =CascadeType.ALL)
     private Set<Media> medias;
-
+*/
 
     @ManyToOne
     @JoinColumn
     private Citizen citizen;
 
 
-
+/*
     @OneToMany(mappedBy = "alert")
     private List<Intervention> interventions=new ArrayList<>();
-
+*/
 
     public AlertC(){super();}
 
@@ -43,8 +43,8 @@ public class AlertC extends Alert implements Comparable<AlertC>{
         super(dateSend, timeSend,localisationA);
         this.alertType = alertType;
         this.description = description;
-        this.medias =  Stream.of(media).collect(Collectors.toSet());
-        this.medias.forEach(x -> x.setAlertC(this));
+        //this.medias =  Stream.of(media).collect(Collectors.toSet());
+       // this.medias.forEach(x -> x.setAlertC(this));
 
 
 
@@ -59,22 +59,22 @@ public class AlertC extends Alert implements Comparable<AlertC>{
     public String getDescription() {
         return description;
     }
-
+/*
     public Set<Media> getMedias() {
         return medias;
     }
 
-
+*/
 
     public Citizen getCitizen() {
         return citizen;
     }
 
-
+/*
     public List<Intervention> getInterventions() {
         return interventions;
     }
-
+*/
 
 
     public void setAlertType(AlertType alertType) {
@@ -84,20 +84,21 @@ public class AlertC extends Alert implements Comparable<AlertC>{
     public void setDescription(String description) {
         this.description = description;
     }
-
+/*
     public void setMedias(Set<Media> medias) {
         this.medias = medias;
     }
-
+*/
 
     public void setCitizen(Citizen citizen) {
         this.citizen = citizen;
     }
 
-
+/*
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
     }
+    */
 
     @Override
     public String toString(){
