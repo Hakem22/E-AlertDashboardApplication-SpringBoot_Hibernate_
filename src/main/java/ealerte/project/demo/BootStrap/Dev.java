@@ -5,6 +5,7 @@ import ealerte.project.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -31,6 +32,8 @@ public class Dev implements ApplicationListener<ContextRefreshedEvent> {
     private AgentRepository agentRepository;
     @Autowired
     private InterventionUnitRepository interventionUnitRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Dev(AdminRepository adminRepository, SensorRepository sensorRepository, MediaRepository mediaRepository, AlertCRepository alertCRepository, CitizenRepository citizenRepository,
                AddressRepository addressRepository, LocalisationARepository localisationARepository, LocalisationURepository localisationURepository, AlertSRepository alertSRepository,
@@ -56,7 +59,7 @@ public class Dev implements ApplicationListener<ContextRefreshedEvent> {
     }
     public  void initData(){
 
-        Agent agent= new Agent( "Nadir","Otman bey", "0487619200", "Nadir31","1123");
+        Agent agent= new Agent( "Nadir","Otman bey", "0487619200", "nadir",bCryptPasswordEncoder.encode("123"));
         Address address=new Address("Aissat idir", "23","22002","Sidi Yacine");
         LocalisationU localisationU=new LocalisationU(45.98, 67.976, 7.99);
         InterventionUnit interventionUnit= new InterventionUnit(InterventionType.GENDARMERIE,localisationU, address);
@@ -73,7 +76,7 @@ public class Dev implements ApplicationListener<ContextRefreshedEvent> {
         alertS.setSensor(sensor);
         alertC.setCitizen(citizen);
         //sensor.addAlertS(alertS);
-        Admin admin=new Admin("Imen", "Hakem","0487619200","Imen22","Imen1995@");
+        Admin admin=new Admin("Imen", "Hakem","0487619200","user",bCryptPasswordEncoder.encode("password"));
 
         alertS.setActeur(admin);
         adminRepository.save(admin);
