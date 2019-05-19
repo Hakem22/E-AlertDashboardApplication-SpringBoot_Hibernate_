@@ -1,5 +1,6 @@
 package ealerte.project.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Acteur {
     @NotEmpty
     private String username;
     @NotEmpty
+   //" @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private String password;
 /*
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "acteur")
