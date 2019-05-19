@@ -15,9 +15,9 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty
-    private String StreetName;
+    private String streetname;
     @NotEmpty
-    private String StreetNumber;
+    private String streetnumber;
     @NotEmpty
     private String postalcode;
     @NotEmpty
@@ -27,9 +27,9 @@ public class Address implements Serializable {
     private InterventionUnit interventionUnit;*/
 
     public Address(){}
-    public Address( @NotEmpty String streetName, @NotEmpty String streetNumber, @NotEmpty String postalcode, @NotEmpty String region) {
-        StreetName = streetName;
-        StreetNumber = streetNumber;
+    public Address( @NotEmpty String streetname, @NotEmpty String streetnumber, @NotEmpty String postalcode, @NotEmpty String region) {
+        this.streetname = streetname;
+        this.streetnumber = streetnumber;
         this.postalcode = postalcode;
         this.region = region;
     }
@@ -38,13 +38,7 @@ public class Address implements Serializable {
         return id;
     }
 
-    public String getStreetName() {
-        return StreetName;
-    }
 
-    public String getStreetNumber() {
-        return StreetNumber;
-    }
 
     public String getPostalcode() {
         return postalcode;
@@ -62,12 +56,20 @@ public class Address implements Serializable {
         this.id = id;
     }
 
-    public void setStreetName(String streetName) {
-        StreetName = streetName;
+    public String getStreetname() {
+        return streetname;
     }
 
-    public void setStreetNumber(String streetNumber) {
-        StreetNumber = streetNumber;
+    public String getStreetnumber() {
+        return streetnumber;
+    }
+
+    public void setStreetname(String streetname) {
+        this.streetname = streetname;
+    }
+
+    public void setStreetnumber(String streetnumber) {
+        this.streetnumber = streetnumber;
     }
 
     public void setPostalcode(String postalcode) {
@@ -85,8 +87,8 @@ public class Address implements Serializable {
     @Override
     public String toString(){
         return new ToStringCreator(this)
-                .append("streetName", this.getStreetName())
-                .append("streetNumber", this.getStreetNumber())
+                .append("streetName", this.getStreetname())
+                .append("streetNumber", this.getStreetnumber())
                 .append("region", this.getRegion())
                 .append("postalCode", this.getPostalcode()).toString();
     }
