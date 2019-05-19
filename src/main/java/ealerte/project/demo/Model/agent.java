@@ -14,7 +14,8 @@ public class Agent extends Acteur {
 
 
     public Agent(){super();}
-    public Agent( @NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password) {
+    public Agent( @NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password
+    ) {
         super( firstName, lastName, phone, username, password);
     }
 
