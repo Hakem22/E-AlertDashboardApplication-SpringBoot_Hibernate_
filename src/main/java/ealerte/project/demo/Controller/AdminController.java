@@ -6,10 +6,12 @@ import ealerte.project.demo.Repository.AdminRepository;
 import ealerte.project.demo.Repository.AlertCRepository;
 import ealerte.project.demo.Repository.AlertRepository;
 import ealerte.project.demo.Repository.AlertSRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,13 +26,16 @@ public class AdminController  {
     private AlertCRepository alertCRepository;
     private AlertSRepository alertSRepository;
     private AlertRepository alertRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AdminController(AdminRepository adminRepository, AlertSRepository alertSRepository,
-                           AlertCRepository alertCRepository, AlertRepository alertRepository) {
+                           AlertCRepository alertCRepository, AlertRepository alertRepository,
+                           BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.adminRepository = adminRepository;
         this.alertCRepository = alertCRepository;
         this.alertSRepository = alertSRepository;
         this.alertRepository = alertRepository;
+        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
     }
 
     @GetMapping("/admins")
@@ -40,9 +45,10 @@ public class AdminController  {
 
     @GetMapping("/admins/{id}")
     public Admin retrieveAdmin(@PathVariable long id) {
+
         Optional<Admin> admin = adminRepository.findById(id);
-       /* if (!admin.isPresent())
-            throw new AdminNotFoundException("id-" + id);*/
+        if (!admin.isPresent())
+            throw new RuntimeException("id not found f l'admin ta3ek" + id);
         return admin.get();
     }
     @DeleteMapping("/admins/{id}")
@@ -58,12 +64,14 @@ public class AdminController  {
         if (!adminOptional.isPresent())  return ResponseEntity.notFound().build();
 
         admin.setId(id);
+        admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
         adminRepository.save(admin);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/admin")
     public void addAdmin(@RequestBody Admin admin){
+        admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
         adminRepository.save(admin);
     }
 
