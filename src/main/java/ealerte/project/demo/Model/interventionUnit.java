@@ -4,6 +4,7 @@ import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,25 +20,31 @@ public class InterventionUnit implements Serializable {
     @Enumerated(EnumType.STRING)
     private InterventionType interventionType;
 
-
+    @NotNull
+    private Double altitude;
+    @NotNull
+    private Double longitude;
+/*
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private LocalisationU localisationU;
-
-    @OneToOne( cascade = CascadeType.ALL)
-    @JoinColumn(unique = true)
-    private Address address;
+*/
+    //@OneToOne( cascade = CascadeType.ALL)
+    //@JoinColumn(unique = true)
+    private String address;
 /*
     @OneToMany(mappedBy = "interventionUnit", cascade = CascadeType.ALL)
     private List<Intervention> interventions= new ArrayList<>();
 */
     public InterventionUnit(){}
 
-    public InterventionUnit(InterventionType interventionType, LocalisationU localisationU, Address address) {
+    public InterventionUnit(InterventionType interventionType, Double altitude,Double longitude, String address) {
         this.interventionType = interventionType;
+        this.altitude=altitude;
+        this.longitude=longitude;
         this.address = address;
         //this.address.setInterventionUnit(this);
-        this.localisationU = localisationU;
+        //this.localisationU = localisationU;
         //this.localisationU.setInterventionUnit(this);
     }
 
@@ -49,16 +56,32 @@ public class InterventionUnit implements Serializable {
         return interventionType;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public LocalisationU getLocalisationU() {
+    /*public LocalisationU getLocalisationU() {
         return localisationU;
     }
-
+*/
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
     }
 
     public void setInterventionType(InterventionType interventionType) {
@@ -69,13 +92,14 @@ public class InterventionUnit implements Serializable {
         return interventions;
     }
 */
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public void setLocalisationU(LocalisationU localisationU) {
+   /* public void setLocalisationU(LocalisationU localisationU) {
         this.localisationU = localisationU;
     }
+    */
 /*
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
@@ -86,7 +110,8 @@ public class InterventionUnit implements Serializable {
         return new ToStringCreator(this)
                 .append("Type", this.getInterventionType())
                 .append("Address", this.getAddress().toString())
-                .append("localisation", this.getLocalisationU().toString())
+                .append("altitude", this.getAltitude())
+                .append("longitude",this.getLongitude())
                 .toString();
     }
 }

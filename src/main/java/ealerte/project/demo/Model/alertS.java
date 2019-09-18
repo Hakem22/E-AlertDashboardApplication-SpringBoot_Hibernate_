@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name="Alert_Sensor")
-public class AlertS extends  Alert implements  Comparable<AlertS>{
+public class AlertS extends  Alert {
 
 
     @NotNull
@@ -30,8 +30,8 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
     public AlertS(){super();}
 
 
-    public AlertS( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend, @NotNull Double value, LocalisationA localisationA) {
-        super( dateSend, timeSend, localisationA);
+    public AlertS( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend, @NotNull Double value, @NotNull Double altitude,@NotNull Double longitude) {
+        super( dateSend, timeSend,altitude,longitude );
         Value = value;
 
     }
@@ -76,12 +76,5 @@ public class AlertS extends  Alert implements  Comparable<AlertS>{
         this.interventions = interventions;
     }
 */
-    public int compareTo(AlertS alerts){
-        if( this.getSensor().getType().equals(alerts.getSensor().getType())
-                &&
-                this.getLocalisationA().compareTo(alerts.getLocalisationA())==1)
-            return 1;
-        return 0;
 
-    }
 }

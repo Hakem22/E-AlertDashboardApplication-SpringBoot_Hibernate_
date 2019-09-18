@@ -52,4 +52,10 @@ public class MediaController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/uri/{id}")
+    public String getURI(@PathVariable Long id) {
+        Optional<Media> media=mediaRepository.findByAlertCId(id);
+        return media.get().getURI();
+    }
+
 }

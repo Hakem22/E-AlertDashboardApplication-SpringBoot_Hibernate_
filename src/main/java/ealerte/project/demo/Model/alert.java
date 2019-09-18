@@ -24,15 +24,17 @@ public class Alert {
     private LocalDate dateSend;
     @NotNull
     private LocalTime timeSend;
+    @NotNull
+    private Double altitude;
+    @NotNull
+    private Double longitude;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateRecieved;
-    private LocalTime timeRecieved;
     private AlertState alertState;
-
+/*
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private LocalisationA localisationA;
-
+*/
     @ManyToOne
     @JoinColumn
     private Acteur acteur;
@@ -40,14 +42,16 @@ public class Alert {
     public Alert(){}
 
 
-    public Alert( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend , LocalisationA localisationA) {
+    public Alert( @NotNull LocalDate dateSend, @NotNull LocalTime timeSend ,@NotNull Double altitude,@NotNull Double longitude ) {
 
         this.dateSend = dateSend;
         this.timeSend = timeSend;
-        this.localisationA=localisationA;
+        this.altitude=altitude;
+        this.longitude=longitude;
+       // this.localisationA=localisationA;
         //this.localisationA.setAlert(this);
     }
-
+/*
     public LocalisationA getLocalisationA() {
         return localisationA;
     }
@@ -55,22 +59,33 @@ public class Alert {
     public void setLocalisationA(LocalisationA localisationA) {
         this.localisationA = localisationA;
     }
-
+*/
     public LocalDate getDateSend() {
         return dateSend;
+    }
+
+    public Double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
     }
 
     public LocalTime getTimeSend() {
         return timeSend;
     }
 
-    public LocalDate getDateRecieved() {
-        return dateRecieved;
-    }
 
-    public LocalTime getTimeRecieved() {
-        return timeRecieved;
-    }
+
 
     public AlertState getAlertState() {
         return alertState;
@@ -84,13 +99,7 @@ public class Alert {
         this.timeSend = timeSend;
     }
 
-    public void setDateRecieved(LocalDate dateRecieved) {
-        this.dateRecieved = dateRecieved;
-    }
 
-    public void setTimeRecieved(LocalTime timeRecieved) {
-        this.timeRecieved = timeRecieved;
-    }
 
     public void setAlertState(AlertState alertState) {
         this.alertState = alertState;

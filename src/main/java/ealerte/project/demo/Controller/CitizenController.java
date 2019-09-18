@@ -1,6 +1,8 @@
 package ealerte.project.demo.Controller;
 
 import ealerte.project.demo.Model.AlertC;
+import ealerte.project.demo.Model.AlertState;
+import ealerte.project.demo.Model.AlertType;
 import ealerte.project.demo.Model.Citizen;
 import ealerte.project.demo.Repository.AlertCRepository;
 import ealerte.project.demo.Repository.CitizenRepository;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,8 +68,8 @@ public class CitizenController {
     }
 
     @GetMapping("/citizen/{id}/alerts")
-    public Page<AlertC> getAllAlertsByCitizenId(@PathVariable (value = "id") Long id, Pageable pageable) {
-        return alertCRepository.findByCitizenId(id,pageable);
+    public List<AlertC> getAllAlertsByCitizenId(@PathVariable (value = "id") Long id) {
+        return alertCRepository.findByCitizenId(id);
     }
 
     @PostMapping("/citizen/{id}/alerts")
@@ -86,6 +89,45 @@ public class CitizenController {
             alertCRepository.delete(alertC);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException("alert not found with id " + alertId + " and postId " + id));
+    }
+
+
+    @GetMapping("/citizen/alertState/{state}")
+    public List<Citizen> getCitizensByAlertsState(@PathVariable String state) {
+        List<AlertC> alertsCitizen= new ArrayList<AlertC>();
+
+        System.out.println("____________________________________________________________________"+state);
+        if(state.equals("valide")) alertsCitizen=alertCRepository.findAlertCByAlertState(AlertState.VALIDE);
+        if(state.equals("invalide")) alertsCitizen=alertCRepository.findAlertCByAlertState(AlertState.INVALIDE);
+
+        List<Citizen> citizens=new ArrayList<Citizen>();
+
+        for (AlertC alert: alertsCitizen) {
+            Optional<Citizen> citizenOptional = citizenRepository.findById(alert.getCitizen().getId());
+            citizens.add(citizenOptional.get());
+        }
+        System.out.println(citizens);
+        return citizens;
+    }
+
+    @GetMapping("/citizen/alertType/{type}")
+    public List<Citizen> getCitizensByAlertsType(@PathVariable String type) {
+        List<AlertC> alertsCitizen= new ArrayList<AlertC>();
+
+        if(type.equals("fire")) alertsCitizen=alertCRepository.findAlertCByAlertType(AlertType.FIRE);
+        if(type.equals("flood")) alertsCitizen=alertCRepository.findAlertCByAlertType(AlertType.FLOOD);
+        if(type.equals("accident")) alertsCitizen=alertCRepository.findAlertCByAlertType(AlertType.ACCIDENT);
+        if(type.equals("earthquack")) alertsCitizen=alertCRepository.findAlertCByAlertType(AlertType.EARTHEQUAKE);
+        if(type.equals("aggression")) alertsCitizen=alertCRepository.findAlertCByAlertType(AlertType.AGGRESSION);
+
+
+        List<Citizen> citizens=new ArrayList<Citizen>();
+
+        for (AlertC alert: alertsCitizen) {
+            Optional<Citizen> citizenOptional = citizenRepository.findById(alert.getCitizen().getId());
+            citizens.add(citizenOptional.get());
+        }
+        return citizens;
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class Citizen {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotEmpty
@@ -37,6 +37,12 @@ public class Citizen {
         this.phoneNumber = phoneNumber;
       //  this.alertsC =  Stream.of(alertsC).collect(Collectors.toSet());
         //this.alertsC.forEach(x -> x.setCitizen(this));
+    }
+
+    public Citizen(@NotEmpty @Digits(fraction = 0, integer = 10) String phoneNumber, String firstName, String fastName) {
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.fastName = fastName;
     }
 
     public Long getId() {

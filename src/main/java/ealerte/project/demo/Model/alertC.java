@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Entity
 @Table(name="Alert_Citizen")
-public class AlertC extends Alert implements Comparable<AlertC>{
+public class AlertC extends Alert {
 
 
     @Enumerated(EnumType.STRING)
@@ -39,8 +39,8 @@ public class AlertC extends Alert implements Comparable<AlertC>{
 
     public AlertC(){super();}
 
-    public AlertC(@NotNull LocalDate dateSend, @NotNull LocalTime timeSend,  AlertType alertType, @NotEmpty String description, LocalisationA localisationA, Media... media) {
-        super(dateSend, timeSend,localisationA);
+    public AlertC(@NotNull LocalDate dateSend, @NotNull LocalTime timeSend,  AlertType alertType, @NotEmpty String description, @NotNull Double altitude,@NotNull Double longitude, Media... media) {
+        super(dateSend, timeSend,altitude,longitude);
         this.alertType = alertType;
         this.description = description;
         //this.medias =  Stream.of(media).collect(Collectors.toSet());
@@ -109,14 +109,7 @@ public class AlertC extends Alert implements Comparable<AlertC>{
 
     }
 
-    public int compareTo(AlertC alertc){
-        if( this.getAlertType().equals(alertc.getAlertType())
-                &&
-                this.getLocalisationA().compareTo(alertc.getLocalisationA())==1)
-            return 1;
-        return 0;
 
-    }
 
 
 }

@@ -2,6 +2,7 @@ package ealerte.project.demo.Controller;
 
 import ealerte.project.demo.Model.Intervention;
 import ealerte.project.demo.Model.InterventionKey;
+import ealerte.project.demo.Model.InterventionType;
 import ealerte.project.demo.Model.InterventionUnit;
 import ealerte.project.demo.Repository.InterventionRepository;
 import ealerte.project.demo.Repository.InterventionUnitRepository;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,7 @@ public class InterventionUnitController  {
     }
     @PostMapping("/unit")
     public void addAUnit(@RequestBody InterventionUnit unit){
-        interventionUnitRepository.save(unit);
+        System.out.println(unit);interventionUnitRepository.save(unit);
     }
 
     @GetMapping("/unit/{id}")
@@ -86,4 +88,45 @@ public class InterventionUnitController  {
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException("intervention not found with id " + interventionId + " and postId " + id));
     }
+
+
+    @GetMapping("/unit/unitType/{type}")
+    public List<InterventionUnit> getAllInterventionsUnitsByType(@PathVariable String type) {
+        System.out.println("____________________________"+type);
+        if(type.equals("hospitality")) {
+            System.out.println( interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.HOSPITALITY));
+            return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.HOSPITALITY);}
+        if(type.equals("policedirection")) return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.POLICE_DIRECTION);
+        if(type.equals("civilprotection")) return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.CIVIL_PROTECTION);
+        else return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.GENDARMERIE);
+    }
+
+
+
+    @GetMapping("/nearestunits/coords")
+    @ResponseBody
+    public List<InterventionUnit> streamData(@RequestParam(required = false) Double al,@RequestParam Double log,@RequestParam Double rayon) {
+        List<InterventionUnit> units=new ArrayList<>();
+        System.out.println(rayon);
+        for (InterventionUnit unit: interventionUnitRepository.findAll()) {
+            if(Math.abs(unit.getAltitude()-al)<rayon && Math.abs(unit.getLongitude()-log)<rayon) {
+                units.add(unit);
+                System.out.println(unit.getAltitude()-al);
+            }
+        }
+        return units;
+    }
+
+    @GetMapping("/unit/unitmobile/{type}")
+    public List<InterventionUnit> getAllInterventionsUnitsByTypeForMobile (@PathVariable String type) {
+        System.out.println("____________________________"+type);
+        if(type.equals("HOSPITALITY")) {
+            System.out.println( interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.HOSPITALITY));
+            return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.HOSPITALITY);}
+        else if(type.equals("POLICE_DIRECTION")) return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.POLICE_DIRECTION);
+        else if(type.equals("CIVIL_PROTECTION")) return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.CIVIL_PROTECTION);
+        else if(type.equals("GENDARMERIE")) return interventionUnitRepository.findInterventionUnitsByInterventionType(InterventionType.GENDARMERIE);
+        else return null;
+    }
+
 }

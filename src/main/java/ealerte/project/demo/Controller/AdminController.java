@@ -1,19 +1,11 @@
 package ealerte.project.demo.Controller;
 
-import ealerte.project.demo.Model.Admin;
-import ealerte.project.demo.Model.Alert;
-import ealerte.project.demo.Repository.AdminRepository;
-import ealerte.project.demo.Repository.AlertCRepository;
-import ealerte.project.demo.Repository.AlertRepository;
-import ealerte.project.demo.Repository.AlertSRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import ealerte.project.demo.Model.*;
+import ealerte.project.demo.Repository.*;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,15 +18,17 @@ public class AdminController  {
     private AlertCRepository alertCRepository;
     private AlertSRepository alertSRepository;
     private AlertRepository alertRepository;
+    private AgentRepository agentRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AdminController(AdminRepository adminRepository, AlertSRepository alertSRepository,
                            AlertCRepository alertCRepository, AlertRepository alertRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           AgentRepository agentRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.adminRepository = adminRepository;
         this.alertCRepository = alertCRepository;
         this.alertSRepository = alertSRepository;
         this.alertRepository = alertRepository;
+        this.agentRepository = agentRepository;
         this.bCryptPasswordEncoder=bCryptPasswordEncoder;
     }
 
@@ -43,12 +37,14 @@ public class AdminController  {
         return (List<Admin>) adminRepository.findAll();
     }
 
-    @GetMapping("/admins/{id}")
-    public Admin retrieveAdmin(@PathVariable long id) {
 
-        Optional<Admin> admin = adminRepository.findById(id);
+
+    @GetMapping("/admins/{username}")
+    public Admin retrieveAdmin(@PathVariable String username) {
+
+        Optional<Admin> admin = adminRepository.findAdminByUsername(username);
         if (!admin.isPresent())
-            throw new RuntimeException("id not found f l'admin ta3ek" + id);
+            throw new RuntimeException("id not found f l'admin ta3ek" + username);
         return admin.get();
     }
     @DeleteMapping("/admins/{id}")
@@ -78,9 +74,22 @@ public class AdminController  {
 
     /* Manipulating Alerts */
 
-    @GetMapping("/admin/{id}/alerts")
-    public Page<Alert> getAllAlertsByAdminId(@PathVariable (value = "id") Long id, Pageable pageable) {
-        return alertRepository.findByActeurId(id,pageable);
+    @GetMapping("/actor/{id}/alerts")
+    public List<Alert> getAllAlertsByActorId(@PathVariable (value = "id") Long id) {
+        System.out.println(alertRepository.findAllByActeurId(id));
+        return alertRepository.findAllByActeurId(id);
+    }
+
+    @GetMapping("/actor/{id}/alertscitizen")
+    public List<AlertC> getAllAlertcitizenByActorId(@PathVariable (value = "id") Long id) {
+        System.out.println(alertCRepository.findAllByActeurId(id));
+        return alertCRepository.findAllByActeurId(id);
+    }
+
+    @GetMapping("/actor/{id}/alertsensor")
+    public List<AlertS> getAllAlertsensorByActorId(@PathVariable (value = "id") Long id) {
+        System.out.println(alertSRepository.findAllByActeurId(id));
+        return alertSRepository.findAllByActeurId(id);
     }
 
     @PostMapping("/admin/{id}/alerts")

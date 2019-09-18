@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -72,4 +73,17 @@ public class Localisation implements Serializable {
                 .append("longitude", this.getLongitude())
                 .toString();
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Localisation that = (Localisation) o;
+        return (that.altitude<=altitude+rayon || that.altitude>=altitude-rayon)
+                &&
+                (that.longitude<=longitude+rayon || that.longitude>=longitude-rayon) ;
+    }
+
+
 }

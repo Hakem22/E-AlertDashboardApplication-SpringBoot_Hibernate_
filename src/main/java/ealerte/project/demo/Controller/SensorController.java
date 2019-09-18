@@ -2,6 +2,8 @@ package ealerte.project.demo.Controller;
 
 import ealerte.project.demo.Model.AlertS;
 import ealerte.project.demo.Model.Sensor;
+import ealerte.project.demo.Model.SensorState;
+import ealerte.project.demo.Model.SensorType;
 import ealerte.project.demo.Repository.AlertSRepository;
 import ealerte.project.demo.Repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +34,7 @@ public class SensorController {
 
     @GetMapping("/sensors")
     public List<Sensor> getSensors() {
+        System.out.println(sensorRepository.findAll());
         return (List<Sensor>) sensorRepository.findAll();
     }
     @PostMapping("/sensor")
@@ -61,8 +65,34 @@ public class SensorController {
     }
 
     @GetMapping("/sensor/{id}/alerts")
-    public Page<AlertS> getAllAlertsBySensorId(@PathVariable (value = "id") Long id, Pageable pageable) {
-        return alertSRepository.findBySensorId(id,pageable);
+    public List<AlertS> getAllAlertsBySensorId(@PathVariable (value = "id") Long id) {
+        return alertSRepository.findBySensorId(id);
+    }
+
+    @GetMapping("/sensor/type/{type}")
+    public List<Sensor> getSensorsByType(@PathVariable String type) {
+        if(type.equals("water")) return sensorRepository.findSensorsByType(SensorType.WATER_LEVEL);
+        else return sensorRepository.findSensorsByType(SensorType.FOREST_FIRE);
+
+    }
+
+    @GetMapping("/sensor/status/{state}")
+    public List<Sensor> getSensorsByState(@PathVariable String state) {
+       SensorState sensorState;
+
+
+        if(state.equals("active")) sensorState=SensorState.ACTIVE;
+        else if(state.equals("suspend")) sensorState=SensorState.SUSPEND;
+        else sensorState=SensorState.DISABLED;
+
+        System.out.println(sensorState);
+       List<Sensor> sensors= new ArrayList<Sensor>() ;
+        List<Sensor> sensorsFound=sensorRepository.findAll();
+        for (Sensor s: sensorsFound){
+            if(s.getState().equals(sensorState)) sensors.add(s);
+        }
+        System.out.println(sensors);
+        return sensors;
     }
 
     @PostMapping("/sensor/{id}/alerts")

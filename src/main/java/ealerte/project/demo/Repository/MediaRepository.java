@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface MediaRepository extends JpaRepository<Media,Long> {
-    Page<Media> findByAlertCId(Long id, Pageable pageable);
+    Optional<Media> findByAlertCId(Long id);
     Optional<Media> findByIdAndAlertCId(Long id, Long alertId);
+
 }

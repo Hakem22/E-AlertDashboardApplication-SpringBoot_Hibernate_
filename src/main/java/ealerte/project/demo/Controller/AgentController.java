@@ -4,14 +4,10 @@ import ealerte.project.demo.Model.Agent;
 import ealerte.project.demo.Model.Alert;
 import ealerte.project.demo.Repository.AgentRepository;
 import ealerte.project.demo.Repository.AlertRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,10 +18,13 @@ import java.util.Optional;
 public class AgentController {
     private AgentRepository agentRepository;
     private AlertRepository alertRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AgentController(AgentRepository agentRepository, AlertRepository alertRepository) {
+
+    public AgentController(AgentRepository agentRepository, AlertRepository alertRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.agentRepository = agentRepository;
         this.alertRepository = alertRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @GetMapping("/agents")
@@ -35,6 +34,7 @@ public class AgentController {
 
     @PostMapping("/agent")
     public void addAgent(@RequestBody Agent agent){
+        agent.setPassword(bCryptPasswordEncoder.encode(agent.getPassword()));
         agentRepository.save(agent);
     }
 
@@ -58,6 +58,7 @@ public class AgentController {
         if (!agentOptional.isPresent())  return ResponseEntity.notFound().build();
 
         agent.setId(id);
+        agent.setPassword(bCryptPasswordEncoder.encode(agent.getPassword()));
         agentRepository.save(agent);
         return ResponseEntity.noContent().build();
     }
@@ -65,8 +66,8 @@ public class AgentController {
     /* Manipulating Alerts */
 
     @GetMapping("/agent/{id}/alerts")
-    public Page<Alert> getAllAlertsByAgentId(@PathVariable (value = "id") Long id, Pageable pageable) {
-        return alertRepository.findByActeurId(id,pageable);
+    public List<Alert> getAllAlertsByAgentId(@PathVariable (value = "id") Long id) {
+        return alertRepository.findAllByActeurId(id);
     }
 
     @PostMapping("/agent/{id}/alerts")

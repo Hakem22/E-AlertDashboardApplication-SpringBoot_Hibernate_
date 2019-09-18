@@ -11,8 +11,8 @@ public class Admin extends Acteur{
 
 
     public Admin(){}
-    public Admin(@NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone, @NotEmpty String username, @NotEmpty String password){
-        super(firstName,lastName, phone,username, password);
+    public Admin(@NotEmpty String firstName, @NotEmpty String lastName, @Digits(fraction = 0, integer = 10) @NotEmpty String phone,@NotEmpty String email, @NotEmpty String username, @NotEmpty String password){
+        super(firstName,lastName, phone, email,username, password);
 
     }
 
